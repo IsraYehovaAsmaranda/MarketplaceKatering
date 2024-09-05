@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\LoginKantorController;
+use App\Http\Controllers\LoginKateringController;
 use App\Http\Controllers\MainController;
 use App\Models\Food;
 use Illuminate\Support\Facades\Route;
@@ -12,12 +14,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('/', MainController::class);
 
-Route::get('/logincustomer', function () {
-    return view('auth.loginkantor');
-});
+Route::resource('/logincustomer', LoginKantorController::class);
 
-Route::get('/loginmerchant', function () {
-    return view('auth.loginkatering');
+Route::resource('/loginmerchant', LoginKateringController::class);
+
+Route::get('/logout', function(){
+    Auth::logout();
+    return redirect('/')->with('success', 'Berhasil Logout');
 });
 
 Route::get('/food/{food}', function(Food $food) {
