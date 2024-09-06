@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterKantorController extends Controller
 {
@@ -12,7 +13,11 @@ class RegisterKantorController extends Controller
      */
     public function index()
     {
-        return view('auth.RegisterKantor');
+        if (Auth::check()) {
+            return redirect('/');
+        } else {
+            return view('auth.RegisterKantor');
+        }
     }
 
     /**

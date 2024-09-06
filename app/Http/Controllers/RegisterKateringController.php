@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-class LoginKateringController extends Controller
+class RegisterKateringController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +16,9 @@ class LoginKateringController extends Controller
         if (Auth::check()) {
             return redirect('/');
         } else {
-            return view('auth.loginkatering');
+            return view('auth.RegisterKatering');
         }
+
     }
 
     /**
@@ -33,33 +35,34 @@ class LoginKateringController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'email' => 'required',
+            'name' => 'required',
+            'address' => 'required',
+            'contact' => 'required',
+            'description' => 'required',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required',
-        ],[
+        ], [
+            'name.required' => 'Name Must Be Filled',
+            'address.required' => 'Address Must Be Filled',
+            'contact.required' => 'Contact Must Be Filled',
+            'description.required' => 'Desccription Must Be Filled',
             'email.required' => 'Email Must Be Filled',
             'password.required' => 'Password Must Be Filled',
         ]);
 
-        $infoLogin = [
+        $infoReqister = [
+            'name' => $request->name,
+            'address' => $request->address,
+            'contact' => $request->contact,
+            'description' => $request->description,
             'email' => $request->email,
             'password' => $request->password,
+            'is_merchant' => '1',
         ];
 
-        if(Auth::attempt($infoLogin)){
-            
-            $user = Auth::user();
+        $user = User::create($infoReqister);
 
-            if($user->is_merchant) {
-                return redirect('/')->with('success', "Successfully logged in as merchant");
-            } else {
-                Auth::logout();
-                return redirect('loginmerchant')->withErrors('This account is registered as customer, please use the corresponding menu');
-            }
-            
-        } else {
-            // If Failed
-            return redirect('loginmerchant')->withErrors('Username or password is invalid');
-        }
+        return redirect('/loginmerchant')->with('success', 'Successfully registered. Now you can login with your new account');
     }
 
     /**

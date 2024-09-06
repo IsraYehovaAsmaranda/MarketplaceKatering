@@ -12,7 +12,11 @@ class LoginKantorController extends Controller
      */
     public function index()
     {
-        return view('auth.loginkantor');
+        if (Auth::check()) {
+            return redirect('/');
+        } else {
+            return view('auth.loginkantor');
+        }
     }
 
     /**
@@ -31,7 +35,7 @@ class LoginKantorController extends Controller
         $request->validate([
             'email' => 'required',
             'password' => 'required',
-        ],[
+        ], [
             'email.required' => 'Email Must Be Filled',
             'password.required' => 'Password Must Be Filled',
         ]);
@@ -41,17 +45,17 @@ class LoginKantorController extends Controller
             'password' => $request->password,
         ];
 
-        if(Auth::attempt($infoLogin)){
-            
+        if (Auth::attempt($infoLogin)) {
+
             $user = Auth::user();
 
-            if(!$user->is_merchant) {
+            if (!$user->is_merchant) {
                 return redirect('/')->with('success', "Successfully logged in as customer");
             } else {
                 Auth::logout();
                 return redirect('logincustomer')->withErrors('This account is registered as a merchant, please use the corresponding menu');
             }
-            
+
         } else {
             // If Failed
             return redirect('logincustomer')->withErrors('Username or password is invalid');
