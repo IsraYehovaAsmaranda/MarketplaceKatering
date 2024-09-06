@@ -28,7 +28,7 @@
                     to your account</button>
 
                 <div class="text-sm font-medium text-gray-500 text-center">
-                    Not registered? <a href="/register" class="text-blue-700 hover:underline">Create
+                    Not registered? <a href="/registercustomer" class="text-blue-700 hover:underline">Create
                         account</a>
                 </div>
 

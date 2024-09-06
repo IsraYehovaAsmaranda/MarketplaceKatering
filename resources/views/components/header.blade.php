@@ -1,4 +1,4 @@
-<header class="bg-white shadow-md">
+<header class="bg-white shadow-md sticky top-0">
     <div class="container mx-auto flex justify-between items-center p-4">
         <div class="text-xl font-bold hidden md:block">
             Marketplace Katering

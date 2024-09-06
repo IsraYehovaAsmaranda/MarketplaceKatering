@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
 use Illuminate\Http\Request;
+use App\Models\User;
 
-class LoginKantorController extends Controller
+class RegisterKantorController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('auth.loginkantor');
+        return view('auth.RegisterKantor');
     }
 
     /**
@@ -29,33 +29,34 @@ class LoginKantorController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'email' => 'required',
+            'name' => 'required',
+            'address' => 'required',
+            'contact' => 'required',
+            'description' => 'required',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required',
         ],[
+            'name.required' => 'Name Must Be Filled',
+            'address.required' => 'Address Must Be Filled',
+            'contact.required' => 'Contact Must Be Filled',
+            'description.required' => 'Desccription Must Be Filled',
             'email.required' => 'Email Must Be Filled',
             'password.required' => 'Password Must Be Filled',
         ]);
 
-        $infoLogin = [
+        $infoReqister = [
+            'name' => $request->name,
+            'address' => $request->address,
+            'contact' => $request->contact,
+            'description' => $request->description,
             'email' => $request->email,
             'password' => $request->password,
+            'is_merchant'=> '0',
         ];
 
-        if(Auth::attempt($infoLogin)){
-            
-            $user = Auth::user();
+        $user = User::create($infoReqister);
 
-            if(!$user->is_merchant) {
-                return redirect('/')->with('success', "Successfully logged in as customer");
-            } else {
-                Auth::logout();
-                return redirect('logincustomer')->withErrors('This account is registered as a merchant, please use the corresponding menu');
-            }
-            
-        } else {
-            // If Failed
-            return redirect('logincustomer')->withErrors('Username or password is invalid');
-        }
+        return redirect('/logincustomer')->with('success', 'Successfully registered. Now you can login with your new account');
     }
 
     /**

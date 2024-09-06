@@ -32,8 +32,8 @@ class LoginKateringController extends Controller
             'email' => 'required',
             'password' => 'required',
         ],[
-            'email.required' => 'Email Wajib Diisi',
-            'password.required' => 'Password Wajib Diisi',
+            'email.required' => 'Email Must Be Filled',
+            'password.required' => 'Password Must Be Filled',
         ]);
 
         $infoLogin = [
@@ -46,15 +46,15 @@ class LoginKateringController extends Controller
             $user = Auth::user();
 
             if($user->is_merchant) {
-                return redirect('/')->with('success', "Berhasil Login Sebagai Merchant");
+                return redirect('/')->with('success', "Successfully logged in as merchant");
             } else {
                 Auth::logout();
-                return redirect('loginmerchant')->withErrors('Akun ini terdaftar sebagai customer');
+                return redirect('loginmerchant')->withErrors('This account is registered as customer, please use the corresponding menu');
             }
             
         } else {
             // If Failed
-            return redirect('loginmerchant')->withErrors('Username atau Password Salah');
+            return redirect('loginmerchant')->withErrors('Username or password is invalid');
         }
     }
 
