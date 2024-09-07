@@ -1,7 +1,8 @@
 <x-layout>
     <div class="container mx-auto p-4">
+        @include('components.message')
         <!-- Grid container -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 my-4">
             <!-- Card 1 -->
             @foreach ($foods as $food)
                 <div class="bg-white shadow-lg rounded-lg overflow-hidden">

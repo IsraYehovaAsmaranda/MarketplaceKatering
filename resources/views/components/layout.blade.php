@@ -5,13 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-
     @vite(['resources/js/app.js', 'resources/css/app.css'])
     <title>Marketplace Katering</title>
 </head>
 
-<body class="font-sans antialiased">
+<body class="font-sans antialiased bg-gray-100">
     <x-header></x-header>
     <main>
         {{ $slot }}
