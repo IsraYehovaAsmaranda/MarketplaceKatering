@@ -78,6 +78,8 @@
                     </button>
                 </div>
             </form>
+
+            {{-- Dialog To Change Password --}}
             <dialog id="changepassword" class="modal modal-bottom sm:modal-middle">
                 <div class="modal-box">
                     <form action="/account/changepassword" method="POST">
@@ -112,8 +114,7 @@
                         <button class="btn">Close</button>
                     </form>
                 </div>
+            </dialog>
         </div>
-        </dialog>
-    </div>
     </div>
 </x-layout>
