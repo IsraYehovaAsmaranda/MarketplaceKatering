@@ -12,14 +12,16 @@
             </button>
         </div>
         @if (Auth::check())
-            <div class="flex items-center space-x-4 relative">
+            <div class="flex items-center space-x-2 relative">
                 <div class="dropdown dropdown-end">
                     <div tabindex="0" role="button"
                         class="btn m-1 bg-blue-700 text-white rounded-md hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         {{ \Illuminate\Support\Str::limit(Auth::user()->name, 15, '...') }} </div>
                     <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
                         @if (Auth::user()->is_merchant)
-                            <li><a href="/yourmenu">Your Menu</a></li>
+                            <li><a href="/menu">Your Menu</a></li>
+                        @else
+                            <li><a href="/cart">Your Cart</a></li>
                         @endif
                         <li><a href="/account">Account Settings</a></li>
                         <li><a class="text-red-500" href="/logout">Logout</a></li>
