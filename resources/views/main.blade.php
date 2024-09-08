@@ -31,7 +31,6 @@
         <div class="modal-box">
             <form action="/" method="POST">
                 @csrf
-                @method('PUT')
                 <h3 id="modal-title" class="text-lg font-bold">Add to Cart</h3>
                 <div class="mb-3">
                     <label class="form-control w-full">

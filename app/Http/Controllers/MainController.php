@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Food;
 
 class MainController extends Controller
@@ -30,8 +32,33 @@ class MainController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'qty' => 'required|numeric',
+            'id' => 'required',
+        ]);
+
+        $user = Auth::user();
+        $userId = $user->id;
+
+        $cart = [
+            'qty' => $request->qty,
+            'user_id' => $userId,
+            'food_id' => $request->id,
+        ];
+
+        $foodData = Food::where('id', '=', $request->id)->first();
+
+        if(!$foodData){
+            return redirect('/')->withErrors('Food not found');
+        }
+
+        $foodName = $foodData->food_name;
+
+        Cart::create($cart);
+
+        return redirect('/')->with('success', "$foodName has been added to your cart");
     }
+    
 
     /**
      * Display the specified resource.
