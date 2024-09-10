@@ -40,7 +40,8 @@ Route::get('/food/{food}', function (Food $food) {
 Route::get('/cart', function () {
     $user = Auth::user();
     $userId = $user->id;
-    $cart = Cart::where('user_id', '=', $userId);
+    $cart = Cart::where('user_id', '=', $userId)->get();
+    Log::info($cart);
     
     return view('cart', [
         'carts' => $cart

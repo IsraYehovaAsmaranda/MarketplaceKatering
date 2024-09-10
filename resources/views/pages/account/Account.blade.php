@@ -14,7 +14,6 @@
             @include('components.message')
             <form action="/account" method="POST">
                 @csrf
-                @method('PUT')
                 <div class="mb-3">
                     <label class="form-control w-full">
                         <div class="label">
