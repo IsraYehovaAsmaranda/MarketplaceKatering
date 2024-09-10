@@ -26,25 +26,19 @@ Route::resource('/registercustomer', RegisterKantorController::class);
 Route::resource('/registermerchant', RegisterKateringController::class);
 
 Route::get('/account', function () {
-    if (!Auth::check()) {
-        return redirect('/')->withErrors('You need to login to access this page');
-    }
-    $user = Auth::user();
-    return view('pages.account.Account', ['user' => $user]);
-});
+    return view('pages.account.Account', ['user' => Auth::user()]);
+})->middleware('loggedin');
 
-Route::put('/account', [AccountController::class, 'changeInfo'])->name('account.changeinfo');
+Route::put('/account', [AccountController::class, 'changeInfo'])->name('account.changeinfo')->middleware('loggedin');
 
-Route::put('/account/changepassword', [AccountController::class, 'changePassword'])->name('account.changepassword');
-
-Route::get('/logout', function () {
-    Auth::logout();
-    return redirect('/')->with('success', 'Successfully logged out');
-});
+Route::put('/account/changepassword', [AccountController::class, 'changePassword'])->name('account.changepassword')->middleware('loggedin');
 
 Route::get('/food/{food}', function (Food $food) {
     $food = Food::find($food);
     return dd($food);
 });
 
-
+Route::get('/logout', function () {
+    Auth::logout();
+    return redirect('/')->with('success', 'Successfully logged out');
+});
