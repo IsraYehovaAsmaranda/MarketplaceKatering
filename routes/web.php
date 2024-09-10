@@ -10,12 +10,6 @@ use App\Models\Food;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AccountController;
 
-// Route::get('/', function () {
-//     return view('main', [
-//         'foods' => Food::all()
-//     ]);
-// });
-
 Route::resource('/', MainController::class);
 
 // For Authentication
@@ -29,21 +23,12 @@ Route::resource('/registermerchant', RegisterKateringController::class);
 
 // For Account Settings
 Route::get('/account', function () {
-    if (!Auth::check()) {
-        return redirect('/')->withErrors('You need to login to access this page');
-    }
-    $user = Auth::user();
-    return view('pages.account.Account', ['user' => $user]);
-});
+    return view('pages.account.Account', ['user' => Auth::user()]);
+})->middleware('loggedin');
 
-Route::put('/account', [AccountController::class, 'changeInfo'])->name('account.changeinfo');
+Route::put('/account', [AccountController::class, 'changeInfo'])->name('account.changeinfo')->middleware('loggedin');
 
-Route::put('/account/changepassword', [AccountController::class, 'changePassword'])->name('account.changepassword');
-
-Route::get('/logout', function () {
-    Auth::logout();
-    return redirect('/')->with('success', 'Successfully logged out');
-});
+Route::put('/account/changepassword', [AccountController::class, 'changePassword'])->name('account.changepassword')->middleware('loggedin');
 
 // For Getting Food Details
 Route::get('/food/{food}', function (Food $food) {
@@ -53,11 +38,6 @@ Route::get('/food/{food}', function (Food $food) {
 
 // For Cart Menu
 Route::get('/cart', function () {
-    $user = Auth::check();
-    if (!$user) {
-        return redirect('/')->withErrors('You need to login to access this page');
-    }
-
     $user = Auth::user();
     $userId = $user->id;
     $cart = Cart::where('user_id', '=', $userId);
@@ -65,4 +45,10 @@ Route::get('/cart', function () {
     return view('cart', [
         'carts' => $cart
     ]);
-});
+})->middleware('iscustomer');
+
+// Logout
+Route::get('/logout', function () {
+    Auth::logout();
+    return redirect('/')->with('success', 'Successfully logged out');
+})->middleware('loggedin');
