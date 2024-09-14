@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\LoginKantorController;
 use App\Http\Controllers\LoginKateringController;
 use App\Http\Controllers\MainController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\RegisterKateringController;
 use App\Models\Cart;
 use App\Models\Food;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\AccountController;
 
 Route::resource('/', MainController::class);
@@ -37,16 +39,7 @@ Route::get('/food/{food}', function (Food $food) {
 });
 
 // For Cart Menu
-Route::get('/cart', function () {
-    $user = Auth::user();
-    $userId = $user->id;
-    $cart = Cart::where('user_id', '=', $userId)->get();
-    Log::info($cart);
-    
-    return view('cart', [
-        'carts' => $cart
-    ]);
-})->middleware('iscustomer');
+Route::resource('/cart', CartController::class)->middleware('iscustomer');
 
 // Logout
 Route::get('/logout', function () {

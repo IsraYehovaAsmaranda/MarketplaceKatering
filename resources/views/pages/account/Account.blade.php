@@ -1,6 +1,6 @@
 <x-layout>
     <div
-        class="container bg-white mx-auto m-4 flex flex-col items-center justify-start p-4 rounded-lg shadow-lg lg:w-1/2">
+        class="container bg-white mx-auto m-4 flex flex-col items-center justify-start p-4 rounded-lg shadow-lg lg:w-1/2 min-h-screen">
         <div class="card-title">
             <h1>Account Information</h1>
         </div>
