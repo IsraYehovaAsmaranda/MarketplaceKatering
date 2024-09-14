@@ -39,18 +39,30 @@ class MainController extends Controller
 
         $user = Auth::user();
         $userId = $user->id;
+        $foodId = $request->id;
+        $qty = $request->qty;
 
         $cart = [
-            'qty' => $request->qty,
+            'qty' => $qty,
             'user_id' => $userId,
-            'food_id' => $request->id,
+            'food_id' => $foodId,
         ];
 
+        // Check If the food exists
         $foodData = Food::where('id', '=', $request->id)->first();
 
-        if(!$foodData){
+        if (!$foodData) {
             return redirect('/')->withErrors('Food not found');
         }
+
+        // Check if the food is already in the cart
+        $userCart = Cart::where('user_id', '=', $userId, 'and', 'food_id', '=', $foodId)->first();
+        if ($userCart) {
+            $userCart->qty += $qty;
+            $userCart->save();
+            return redirect('/')->with('success', 'Quantity of the food has been updated inside your cart');
+        }
+
 
         $foodName = $foodData->food_name;
 
@@ -58,7 +70,7 @@ class MainController extends Controller
 
         return redirect('/')->with('success', "$foodName has been added to your cart");
     }
-    
+
 
     /**
      * Display the specified resource.
