@@ -12,27 +12,43 @@
                 @method('PUT')
 
                 @foreach ($carts as $cart)
-                    <div class="mb-3 w-full">
-                        <div class="grid grid-cols-5">
-                            <div class="form-control col-span-1">
+                    <div class="mb-4 w-full">
+                        <div class="grid grid-cols-5 items-center gap-4 bg-gray-100 p-4 rounded-lg">
+                            <!-- Checkbox -->
+                            <div class="form-control">
                                 <label class="label cursor-pointer">
-                                    <input type="checkbox" checked="checked" id="checkCart{{ $cart->id }}"
-                                        name="checkCart[]" class="checkbox" value="{{ $cart->id }}" />
+                                    <input type="radio" id="radioCart{{ $cart->id }}"
+                                        name="selectedCart" class="radio bg-white" value="{{ $cart->id }}" />
                                 </label>
                             </div>
-                            <div class="form-control col-span-2 p-2">
-                                <h1> {{ $cart->food->food_name }} </h1>
+
+                            <!-- Food name and image -->
+                            <div class="col-span-2 flex items-center">
+                                <div class="flex flex-col items-start gap-2">
+                                    <!-- Food name -->
+                                    <h2 class="text-lg font-semibold">{{ $cart->food->food_name }}</h2>
+                                    <!-- Food image -->
+                                    <div class="h-[64px] w-[128px]">
+                                        <img src="{{ $cart->food->image_url }}" alt="Food Image"
+                                            class="h-full w-full object-cover rounded-lg">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-control col-span-1">
-                                <input type="number" placeholder="Qty" name="qty" id="qty{{ $cart->id }}"
-                                    name="qty[]" class="input input-bordered w-full" maxlength="3"
+
+                            <!-- Quantity input -->
+                            <div class="form-control">
+                                <input type="number" placeholder="Qty" id="qty{{ $cart->id }}" name="qty[]"
+                                    class="input input-bordered w-full text-center" maxlength="3"
                                     value="{{ $cart->qty }}" required />
                             </div>
-                            <div class="form-control col-span-1 p-2">
-                                <button type="button" class="text-red-500"
+
+                            <!-- Delete button -->
+                            <div class="text-center">
+                                <button type="button" class="text-red-500 hover:text-red-700 hover:bg-gray-300 p-4 transition"
                                     onclick="updateCartModal(this); itemmodal.showModal()"
-                                    data-cartid="{{ $cart->id }}" data-itemname="{{ $cart->food->food_name }}"><i
-                                        class="fa-solid fa-trash"></i></button>
+                                    data-cartid="{{ $cart->id }}" data-itemname="{{ $cart->food->food_name }}">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -46,7 +62,8 @@
                         </button>
                     @else
                         <button
-                            class="py-2 px-4 w-full bg-gray-700 text-white rounded-md hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-gray-300" disabled>
+                            class="py-2 px-4 w-full bg-gray-700 text-white rounded-md hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-gray-300"
+                            disabled>
                             You have no food in your cart
                         </button>
                     @endif

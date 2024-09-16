@@ -56,7 +56,10 @@ class MainController extends Controller
         }
 
         // Check if the food is already in the cart
-        $userCart = Cart::where('user_id', '=', $userId, 'and', 'food_id', '=', $foodId)->first();
+        $userCart = Cart::where([
+            ['user_id', '=', $userId],
+            ['food_id', '=', $foodId],
+        ])->first();
         if ($userCart) {
             $userCart->qty += $qty;
             $userCart->save();
