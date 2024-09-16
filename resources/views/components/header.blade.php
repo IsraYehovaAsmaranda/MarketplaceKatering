@@ -29,7 +29,7 @@
                 </div>
             </div>
         @else
-            <!-- Tombol untuk layar kecil -->
+            <!-- Button for smaller screen -->
             <div class="flex items-center space-x-4 md:hidden">
                 <div class="dropdown dropdown-end">
                     <div tabindex="0" role="button"

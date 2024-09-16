@@ -12,7 +12,7 @@ class Food extends Model
     use HasFactory;
     protected $table = 'foods';
 
-    protected $fillable = ['merchant_id', 'food_name', 'description', 'image_url', 'price'];
+    protected $fillable = ['merchant_id', 'category_id', 'food_name', 'description', 'image_url', 'price'];
 
     public function merchant(): BelongsTo{
         return $this->belongsTo(User::class);
