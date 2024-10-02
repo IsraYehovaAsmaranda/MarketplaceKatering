@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Food;
 use Auth;
 use Illuminate\Http\Request;
+use Storage;
 
 class FoodMenuController extends Controller
 {
@@ -15,7 +17,8 @@ class FoodMenuController extends Controller
     {
         $user = Auth::user();
         $merchantFoodMenu = Food::where('merchant_id', '=', $user->id)->get();
-        return view('pages.FoodMenu', ['user' => $user, 'foodmenus' => $merchantFoodMenu]);
+        $menuCategory = Category::all();
+        return view('pages.FoodMenu.FoodMenu', ['user' => $user, 'foodmenus' => $merchantFoodMenu, 'menucategory' => $menuCategory]);
     }
 
     /**
@@ -31,15 +34,40 @@ class FoodMenuController extends Controller
      */
     public function store(Request $request)
     {
-        Food::create([
-          'merchant_id' => 16,
-          'category_id' => 1,
-          'food_name'  => 'Testing',
-          'description' => 'Description',
-          'image_url' => 'https://cdn.britannica.com/36/123536-050-95CB0C6E/Variety-fruits-vegetables.jpg',
-          'price' => 20000
+        $request->validate([
+            'foodname' => 'required',
+            'foodcategory' => 'required|exists:categories,id',
+            'foodprice' => 'required|numeric',
+            'fooddescription' => 'required',
+            'foodimage' => 'required|mimes:jpg,jpeg,png'
+        ], [
+            'foodname.required' => 'Food name must be filled',
+            'foodcategory.exists:categories,id' => 'Category does not exist',
+            'foodcategory.required' => 'Food category must be filled',
+            'foodprice.required' => 'Food price must be filled',
+            'foodprice.numeric' => 'Food price must be a number',
+            'fooddescription.required' => 'Food description must be filled',
+            'foodimage.required' => 'Image must be filled',
+            'foodimage.mimes:jpg,jpeg,png' => 'Image type must be JPG, or PNG',
         ]);
-        return redirect('/menu')->withErrors('Testing');
+
+        $user = Auth::user();
+
+        $foodImagePath = $request->file('foodimage')->store('food_menu', 'public');
+
+        try {
+            Food::create([
+                'merchant_id' => $user->id,
+                'category_id' => $request->foodcategory,
+                'food_name' => $request->foodname,
+                'description' => $request->fooddescription,
+                'image_url' => $foodImagePath,
+                'price' => $request->foodprice
+            ]);
+            return redirect('/menu')->with('success', 'New menu has been addded');
+        } catch (\Throwable $th) {
+            return redirect('/menu')->withErrors('Failed adding menu, something went wrong');
+        }
     }
 
     /**

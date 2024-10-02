@@ -11,6 +11,7 @@
                     <div class="p-4">
                         <h2 class="text-xl font-bold mb-2">{{ $food->food_name }}</h2>
                         <p class="text-sm text-gray-500 mb-2">{{ $food->merchant->name }}</p>
+                        <p class="text-sm text-gray-500 mb-2">{{ $food->merchant->address }}</p>
                         <p class="text-sm text-gray-700 mb-2">{{ $food->description }}</p>
                         <p class="text-gray-600">Rp {{ number_format($food->price, 2, ',', '.') }}</p>
                     </div>

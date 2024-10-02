@@ -20,6 +20,7 @@
                     <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
                         @if (Auth::user()->is_merchant)
                             <li><a href="/menu">Your Menu</a></li>
+                            <li><a href="/orders">Order</a></li>
                         @else
                             <li><a href="/cart">Your Cart</a></li>
                         @endif
