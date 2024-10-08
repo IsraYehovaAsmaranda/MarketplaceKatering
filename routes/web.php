@@ -7,10 +7,8 @@ use App\Http\Controllers\LoginKateringController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\RegisterKantorController;
 use App\Http\Controllers\RegisterKateringController;
-use App\Models\Cart;
 use App\Models\Food;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\AccountController;
 
 Route::resource('/', MainController::class);
@@ -24,14 +22,17 @@ Route::resource('/registercustomer', RegisterKantorController::class);
 
 Route::resource('/registermerchant', RegisterKateringController::class);
 
+
 // For Getting Food Details
 Route::get('/food/{food}', function (Food $food) {
     $food = Food::find($food);
     return dd($food);
 });
 
+
 // For Cart Menu
 Route::resource('/cart', CartController::class)->middleware('iscustomer');
+
 
 // For Merchant's Menu
 Route::resource('/menu', FoodMenuController::class)->middleware('ismerchant');
@@ -45,6 +46,7 @@ Route::get('/account', function () {
 Route::put('/account', [AccountController::class, 'changeInfo'])->name('account.changeinfo')->middleware('loggedin');
 
 Route::put('/account/changepassword', [AccountController::class, 'changePassword'])->name('account.changepassword')->middleware('loggedin');
+
 
 // Logout
 Route::get('/logout', function () {

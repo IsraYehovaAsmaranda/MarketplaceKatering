@@ -1,7 +1,7 @@
 {{-- Dialog To Update Menu --}}
 <dialog id="updatemenu" class="modal modal-bottom sm:modal-middle">
     <div class="modal-box">
-        <form action="/menu" enctype="multipart/form-data" method="POST">
+        <form action="/menu" id="formupdatemenu" enctype="multipart/form-data" method="POST">
             @method('PUT')
             @csrf
             <h3 class="text-lg font-bold">Update Menu</h3>
@@ -21,7 +21,7 @@
                     <div class="label">
                         <span class="label-text">Category</span>
                     </div>
-                    <select class="select select-bordered" id="updatefoodcategory" name="updatefood">
+                    <select class="select select-bordered" id="updatefoodcategory" name="foodcategory">
                         <option disabled selected>Pick a category</option>
                         @foreach ($menucategory as $cat)
                             <option value="{{ $cat->id }}"> {{ $cat->category_name }} </option>
@@ -53,7 +53,7 @@
                         <span class="label-text">Food Image (not required)</span>
                     </div>
                     <input type="file" name="foodimage" id="foodimage"
-                        class="file-input file-input-bordered w-full max-w-xs" accept="image/*" required />
+                        class="file-input file-input-bordered w-full max-w-xs" accept="image/*" />
                 </label>
             </div>
             <div class="modal-action">

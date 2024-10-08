@@ -6,7 +6,7 @@
             <!-- Card 1 -->
             @foreach ($foods as $food)
                 <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-                    <img src="{{ $food->image_url }}" alt="Makanan {{ $food->food_name }}"
+                    <img src="{{ Storage::url($food->image_url) }}" alt="Makanan {{ $food->food_name }}"
                         class="w-full h-48 object-cover">
                     <div class="p-4">
                         <h2 class="text-xl font-bold mb-2">{{ $food->food_name }}</h2>

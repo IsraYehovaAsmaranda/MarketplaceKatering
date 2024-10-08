@@ -78,18 +78,20 @@
         const foodDescription = button.getAttribute('data-foodDescription');
         const foodPrice = button.getAttribute('data-foodPrice');
 
+        const formUpdateMenu = document.querySelector('#formupdatemenu')
         const updateFoodIdInput = document.querySelector('#updatefoodid');
         const updateFoodNameInput = document.querySelector('#updatefoodname');
         const updateFoodCategoryInput = document.querySelector('#updatefoodcategory');
         const updateFoodDescriptionInput = document.querySelector('#updatefooddescription');
         const updateFoodPriceInput = document.querySelector('#updatefoodprice');
 
-        console.log(updateFoodCategoryInput);
-
+        formUpdateMenu.action = "/menu/" + foodId;
         updateFoodIdInput.value = foodId;
         updateFoodNameInput.value = foodName;
         updateFoodCategoryInput.value = foodCategory;
         updateFoodDescriptionInput.value = foodDescription;
         updateFoodPriceInput.value = foodPrice;
+
+        console.log(formUpdateMenu);
     }
 </script>

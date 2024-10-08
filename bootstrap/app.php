@@ -6,6 +6,7 @@ use App\Http\Middleware\EnsureUserLoggedIn;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Database\QueryException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -21,5 +22,11 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        if ($exceptions instanceof QueryException) {
+            dd($exceptions->getMessage());
+            //return response()->view('custom_view');
+        } elseif ($exceptions instanceof PDOException) {
+            dd($exceptions->getMessage());
+            //return response()->view('custom_view');
+        }
     })->create();

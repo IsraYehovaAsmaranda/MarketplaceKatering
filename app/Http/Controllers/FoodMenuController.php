@@ -51,11 +51,12 @@ class FoodMenuController extends Controller
             'foodimage.mimes:jpg,jpeg,png' => 'Image type must be JPG, or PNG',
         ]);
 
-        $user = Auth::user();
-
-        $foodImagePath = $request->file('foodimage')->store('food_menu', 'public');
 
         try {
+            $user = Auth::user();
+
+            $foodImagePath = $request->file('foodimage')->store('food_menu', 'public');
+
             Food::create([
                 'merchant_id' => $user->id,
                 'category_id' => $request->foodcategory,
@@ -65,8 +66,8 @@ class FoodMenuController extends Controller
                 'price' => $request->foodprice
             ]);
             return redirect('/menu')->with('success', 'New menu has been addded');
-        } catch (\Throwable $th) {
-            return redirect('/menu')->withErrors('Failed adding menu, something went wrong');
+        } catch (\Exception $e) {
+            return redirect('/menu')->withErrors('Something went wrong, please try again');
         }
     }
 
@@ -91,7 +92,53 @@ class FoodMenuController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'foodname' => 'required',
+            'foodcategory' => 'required|exists:categories,id',
+            'foodprice' => 'required|numeric',
+            'fooddescription' => 'required',
+            'foodimage' => 'nullable|image|mimes:jpg,jpeg,png'
+        ], [
+            'foodname.required' => 'Food name must be filled',
+            'foodcategory.exists:categories,id' => 'Category does not exist',
+            'foodcategory.required' => 'Food category must be filled',
+            'foodprice.required' => 'Food price must be filled',
+            'foodprice.numeric' => 'Food price must be a number',
+            'fooddescription.required' => 'Food description must be filled',
+            'foodimage.mimes' => 'Image type must be JPG, or PNG',
+        ]);
+
+        try {
+            $userId = Auth::id();
+
+            $foodData = Food::findOrFail($id);
+
+            if ($foodData->merchant_id != $userId) {
+                return redirect()->withErrors("You are unauthorized to update this item");
+            }
+
+            if ($request->hasFile("foodimage")) {
+                if ($foodData->image_url) {
+                    Storage::disk('public')->delete($foodData->image_url);
+                }
+
+                $foodImagePath = $request->file('foodimage')->store('food_menu', 'public');
+
+                $foodData->image_url = $foodImagePath;
+            }
+
+            $foodData->food_name = $request->foodname;
+            $foodData->category_id = $request->foodcategory;
+            $foodData->price = $request->foodprice;
+            $foodData->description = $request->fooddescription;
+            $foodData->save();
+
+            return redirect()->back()->with("success", "Successfully updated menu information");
+
+
+        } catch (\Exception $e) {
+            return redirect()->withErrors("Something went wrong, please try again");
+        }
     }
 
     /**
