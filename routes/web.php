@@ -33,10 +33,10 @@ Route::get('/food/{food}', function (Food $food) {
 // For Cart Menu
 Route::resource('/cart', CartController::class)->middleware('iscustomer');
 
-
 // For Merchant's Menu
 Route::resource('/menu', FoodMenuController::class)->middleware('ismerchant');
 
+Route::put('/menu/{id}/togglestatus', [FoodMenuController::class, 'toggleStatus'])->name('foodmenu.togglestatus')->middleware('ismerchant');
 
 // For Account Settings
 Route::get('/account', function () {

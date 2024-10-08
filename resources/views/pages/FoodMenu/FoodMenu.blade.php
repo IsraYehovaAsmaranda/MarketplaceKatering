@@ -47,17 +47,27 @@
                                     <button
                                         class="btn m-1 bg-yellow-700 text-white rounded-md hover:bg-yellow-800 focus:outline-none focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-600 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800"
                                         onclick="updateMenuModal(this);updatemenu.showModal()"
-                                        data-foodId="{{$foodMenu->id}}"
-                                        data-foodName="{{$foodMenu->food_name}}"
-                                        data-foodCategory="{{$foodMenu->category_id}}"
-                                        data-foodDescription="{{$foodMenu->description}}"
-                                        data-foodPrice="{{$foodMenu->price}}">
+                                        data-foodId="{{ $foodMenu->id }}" data-foodName="{{ $foodMenu->food_name }}"
+                                        data-foodCategory="{{ $foodMenu->category_id }}"
+                                        data-foodDescription="{{ $foodMenu->description }}"
+                                        data-foodPrice="{{ $foodMenu->price }}">
                                         Edit
                                     </button>
-                                    <button
-                                        class="btn m-1 bg-red-700 text-white rounded-md hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
-                                        Disable
-                                    </button>
+                                    <form action="/menu/{{ $foodMenu->id }}/togglestatus" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        @if ($foodMenu->status)
+                                            <button name="statusto" value="0"
+                                                class="btn m-1 bg-red-700 text-white rounded-md hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                                                Disable
+                                            </button>
+                                        @else
+                                            <button value="1" name="statusto"
+                                                class="btn m-1 bg-green-700 text-white rounded-md hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                                                Enable
+                                            </button>
+                                        @endif
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach

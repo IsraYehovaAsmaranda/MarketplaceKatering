@@ -25,6 +25,7 @@ class FoodFactory extends Factory
             'description' => fake()->text(),
             'image_url' => fake()->imageUrl(),
             'price' => fake()->randomNumber(),
+            'status' => fake()->boolean(),
         ];
     }
 }

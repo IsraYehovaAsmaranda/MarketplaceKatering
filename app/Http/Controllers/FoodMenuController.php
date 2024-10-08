@@ -63,7 +63,8 @@ class FoodMenuController extends Controller
                 'food_name' => $request->foodname,
                 'description' => $request->fooddescription,
                 'image_url' => $foodImagePath,
-                'price' => $request->foodprice
+                'price' => $request->foodprice,
+                'status' => true,
             ]);
             return redirect('/menu')->with('success', 'New menu has been addded');
         } catch (\Exception $e) {
@@ -114,7 +115,7 @@ class FoodMenuController extends Controller
             $foodData = Food::findOrFail($id);
 
             if ($foodData->merchant_id != $userId) {
-                return redirect()->withErrors("You are unauthorized to update this item");
+                return redirect()->back()->withErrors("You are unauthorized to update this item");
             }
 
             if ($request->hasFile("foodimage")) {
@@ -137,7 +138,7 @@ class FoodMenuController extends Controller
 
 
         } catch (\Exception $e) {
-            return redirect()->withErrors("Something went wrong, please try again");
+            return redirect()->back()->withErrors("Something went wrong, please try again");
         }
     }
 
@@ -147,5 +148,27 @@ class FoodMenuController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function toggleStatus(Request $request, string $id)
+    {
+        try {
+            $userId = Auth::id();
+
+            $foodData = Food::findOrFail($id);
+
+            if ($foodData->merchant_id != $userId) {
+                return redirect()->back()->withErrors("You are unauthorized to update this item");
+            }
+
+            $currentStatus = $foodData->status;
+
+            $foodData->status = !$currentStatus;
+            $foodData->save();
+
+            return redirect()->back()->with('success', 'Successfully updated menu status');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors('Something went wrong, please try again');
+        }
     }
 }
