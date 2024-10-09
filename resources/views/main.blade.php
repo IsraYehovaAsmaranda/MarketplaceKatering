@@ -15,13 +15,15 @@
                         <p class="text-sm text-gray-700 mb-2">{{ $food->description }}</p>
                         <p class="text-gray-600">Rp {{ number_format($food->price, 2, ',', '.') }}</p>
                     </div>
-                    <div class="p-4 align-bottom item">
-                        <button onclick="updateCartModal(this); cartmodal.showModal()"
-                            data-productname="{{ $food->food_name }}" data-productid="{{ $food->id }}"
-                            class="flex items-center mt-2 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:ring-4 focus:ring-green-300">
-                            <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
-                        </button>
-                    </div>
+                    @if (!$ismerchant)
+                        <div class="p-4 align-bottom item">
+                            <button onclick="updateCartModal(this); cartmodal.showModal()"
+                                data-productname="{{ $food->food_name }}" data-productid="{{ $food->id }}"
+                                class="flex items-center mt-2 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:ring-4 focus:ring-green-300">
+                                <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
+                            </button>
+                        </div>
+                    @endif
                 </div>
             @endforeach
         </div>

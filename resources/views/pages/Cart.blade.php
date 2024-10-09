@@ -17,8 +17,8 @@
                             <!-- Checkbox -->
                             <div class="form-control">
                                 <label class="label cursor-pointer">
-                                    <input type="radio" id="radioCart{{ $cart->id }}"
-                                        name="selectedCart" class="radio bg-white" value="{{ $cart->id }}" />
+                                    <input type="radio" id="radioCart{{ $cart->id }}" name="selectedCart"
+                                        class="radio bg-white" value="{{ $cart->id }}" required />
                                 </label>
                             </div>
 
@@ -29,7 +29,7 @@
                                     <h2 class="text-lg font-semibold">{{ $cart->food->food_name }}</h2>
                                     <!-- Food image -->
                                     <div class="h-[64px] w-[128px]">
-                                        <img src="{{ $cart->food->image_url }}" alt="Food Image"
+                                        <img src="{{ Storage::url($cart->food->image_url) }}" alt="Food Image"
                                             class="h-full w-full object-cover rounded-lg">
                                     </div>
                                 </div>
@@ -44,7 +44,8 @@
 
                             <!-- Delete button -->
                             <div class="text-center">
-                                <button type="button" class="text-red-500 hover:text-red-700 hover:bg-gray-300 p-4 transition"
+                                <button type="button"
+                                    class="text-red-500 hover:text-red-700 hover:bg-gray-300 p-4 transition"
                                     onclick="updateCartModal(this); itemmodal.showModal()"
                                     data-cartid="{{ $cart->id }}" data-itemname="{{ $cart->food->food_name }}">
                                     <i class="fa-solid fa-trash"></i>

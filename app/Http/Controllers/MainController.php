@@ -14,8 +14,16 @@ class MainController extends Controller
      */
     public function index()
     {
+        if (Auth::check() && Auth::user()->is_merchant) {
+            return view('main', [
+                'foods' => Food::where('status', true)->get(),
+                'ismerchant' => true,
+            ]);
+        }
+
         return view('main', [
             'foods' => Food::where('status', true)->get(),
+            'ismerchant' => false,
         ]);
     }
 
@@ -37,41 +45,45 @@ class MainController extends Controller
             'id' => 'required',
         ]);
 
-        $user = Auth::user();
-        $userId = $user->id;
-        $foodId = $request->id;
-        $qty = $request->qty;
+        try {
+            if (!Auth::check()) {
+                return redirect('logincustomer')->withErrors('You have to log in first');
+            }
 
-        $cart = [
-            'qty' => $qty,
-            'user_id' => $userId,
-            'food_id' => $foodId,
-        ];
+            $user = Auth::user();
+            $userId = $user->id;
+            $foodId = $request->id;
+            $qty = $request->qty;
 
-        // Check If the food exists
-        $foodData = Food::where('id', '=', $request->id)->first();
+            $cart = [
+                'qty' => $qty,
+                'user_id' => $userId,
+                'food_id' => $foodId,
+            ];
 
-        if (!$foodData) {
-            return redirect('/')->withErrors('Food not found');
+            // Check If the food exists
+            $foodData = Food::findOrFail($foodId);
+
+            // Check if the food is already in the cart
+            $userCart = Cart::where([
+                ['user_id', '=', $userId],
+                ['food_id', '=', $foodId],
+            ])->first();
+            if ($userCart) {
+                $userCart->qty += $qty;
+                $userCart->save();
+                return redirect('/')->with('success', 'Quantity of the food has been updated inside your cart');
+            }
+
+
+            $foodName = $foodData->food_name;
+
+            Cart::create($cart);
+
+            return redirect('/')->with('success', "$foodName has been added to your cart");
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors('Something went wrong. Please try again');
         }
-
-        // Check if the food is already in the cart
-        $userCart = Cart::where([
-            ['user_id', '=', $userId],
-            ['food_id', '=', $foodId],
-        ])->first();
-        if ($userCart) {
-            $userCart->qty += $qty;
-            $userCart->save();
-            return redirect('/')->with('success', 'Quantity of the food has been updated inside your cart');
-        }
-
-
-        $foodName = $foodData->food_name;
-
-        Cart::create($cart);
-
-        return redirect('/')->with('success', "$foodName has been added to your cart");
     }
 
 
