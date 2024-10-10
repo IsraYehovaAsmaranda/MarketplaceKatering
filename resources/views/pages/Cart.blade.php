@@ -7,9 +7,8 @@
         <div class="divider"></div>
         <div class="w-full">
             @include('components.message')
-            <form action="/cart" method="POST">
+            <form id="checkoutForm" action="/checkout" method="POST">
                 @csrf
-                @method('PUT')
 
                 @foreach ($carts as $cart)
                     <div class="mb-4 w-full">
@@ -37,7 +36,7 @@
 
                             <!-- Quantity input -->
                             <div class="form-control">
-                                <input type="number" placeholder="Qty" id="qty{{ $cart->id }}" name="qty[]"
+                                <input type="number" placeholder="Qty" id="qty{{ $cart->id }}" name="qty"
                                     class="input input-bordered w-full text-center" maxlength="3"
                                     value="{{ $cart->qty }}" required />
                             </div>
@@ -121,4 +120,20 @@
         const form = document.querySelector('#itemmodal form');
         form.action = `/cart/${cartId}`;
     }
+
+    document.getElementById('checkoutForm').addEventListener('submit', function(event) {
+        // Get the selected radio button value
+        const selectedCartId = document.querySelector('input[name="selectedCart"]:checked').value;
+
+        // Get all quantity inputs
+        const allQtyInputs = document.querySelectorAll('input[name="qty"]');
+
+        // Loop through the quantity inputs and disable those not selected
+        allQtyInputs.forEach(function(input) {
+            const cartId = input.id.replace('qty', ''); // Extract cart ID from input ID
+            if (cartId !== selectedCartId) {
+                input.disabled = true; // Disable the unselected inputs
+            }
+        });
+    });
 </script>

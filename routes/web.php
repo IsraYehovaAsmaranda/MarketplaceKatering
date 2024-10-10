@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckOutController;
 use App\Http\Controllers\FoodMenuController;
 use App\Http\Controllers\LoginKantorController;
 use App\Http\Controllers\LoginKateringController;
@@ -22,16 +23,11 @@ Route::resource('/registercustomer', RegisterKantorController::class);
 
 Route::resource('/registermerchant', RegisterKateringController::class);
 
-
-// For Getting Food Details
-Route::get('/food/{food}', function (Food $food) {
-    $food = Food::find($food);
-    return dd($food);
-});
-
-
 // For Cart Menu
 Route::resource('/cart', CartController::class)->middleware('iscustomer');
+
+// For Checkout Menu
+Route::post('/checkout', [CheckOutController::class, 'store'])->middleware('iscustomer');
 
 // For Merchant's Menu
 Route::resource('/menu', FoodMenuController::class)->middleware('ismerchant');
